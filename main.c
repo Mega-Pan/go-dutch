@@ -33,7 +33,6 @@ void printList() {
 	
    	while(ptr) {
       	printf("(%s, %s, %d, %s)\n",ptr->from, ptr->to, ptr->value, ptr->item);
-
     	ptr = ptr->next;
    	}
 
