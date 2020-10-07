@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LEN 20
+
 struct node{
-	char *from;
-	char *to;
+	char from[LEN+1];
+	char to[LEN+1];
 	int value;
-	char *item;
+	char item[LEN];
 	struct node *next;
 };
 
@@ -16,10 +18,10 @@ struct node *head = NULL;
 void insertFirst(char* tx, char* rx, int v, char* name) {
    	struct node *link = (struct node*) malloc(sizeof(struct node));
 
-	link->from = tx;
-	link->to = rx;
+	strncpy(link->from, tx, LEN);
+	strncpy(link->to, tx, LEN);
 	link->value = v;
-	link->item = name; 
+	strncpy(link->item, name, LEN);
 	
 	printf("#### Debug: Add to Linked list >>>>");
     printf("(%s, %s, %d, %s)\n\n",link->from,link->to,link->value,link->item);
@@ -51,7 +53,7 @@ int input(){
 	printf("John needs to give Mary 10 dollars for coffee \n");	
 	printf("Type in: John Mary 10 coffee \n");	
 	printf("->");	
-	char tx[20], rx[20], name[20];
+	char tx[LEN], rx[LEN], name[LEN];
 	int dollars;
 
 	scanf("%20s",tx);
