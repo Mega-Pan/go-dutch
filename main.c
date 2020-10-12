@@ -100,10 +100,11 @@ int input(){
 int show(){
 	char str[LEN];
 	printList(head);
-	printf("###################################\n");
+	printf("---------------- show loan  ------------------------\n");
   	printf("Whos' loan you want to check? ");
 	scanf("%s", str);
 	printLoan(str);
+	printf("----------------------------------------------------\n");
 	return 0;
 }
 int menu(){
@@ -127,8 +128,7 @@ int menu(){
 	}
 	else if (strcmp(str,"s") == 0){
 		printf("show()\n");
-		printList(head);
-		printf("###########################\n");
+		// printList(head); print out every node in list
 		show();
 	}
 	else {
