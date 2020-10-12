@@ -15,30 +15,59 @@ struct node{
 struct node *head = NULL;
 
 //insert link at the first location
-void insertFirst(char* tx, char* rx, int v, char* name) {
+void insertFirst(struct node **head,char* tx, char* rx, int v, char* name) {
    	struct node *link = (struct node*) malloc(sizeof(struct node));
 
 	strncpy(link->from, tx, LEN);
-	strncpy(link->to, tx, LEN);
+	strncpy(link->to, rx, LEN);
 	link->value = v;
 	strncpy(link->item, name, LEN);
 	
 	printf("#### Debug: Add to Linked list >>>>");
     printf("(%s, %s, %d, %s)\n\n",link->from,link->to,link->value,link->item);
 
-   	link->next = head;
-   	head = link;
+   	link->next = *head;
+   	*head = link;
 }
 
-void printList() {
-   struct node *ptr = head;
-	
+void printList(struct node *head) {
+   	struct node *ptr = head;
+
    	while(ptr) {
       	printf("(%s, %s, %d, %s)\n",ptr->from, ptr->to, ptr->value, ptr->item);
     	ptr = ptr->next;
    	}
-
 }
+int printLoan(char* name){
+	int found = 0;
+
+	struct node *newList = NULL;
+	struct node *ptr = head;
+	
+	// temp node, will be freed after exit this func.
+   	struct node *link = (struct node*) malloc(sizeof(struct node));
+	
+	while(ptr) {
+		if(strcmp(ptr->from,name)==0){
+			found = 1;
+			insertFirst(&newList,ptr->from,ptr->to,ptr->value,ptr->item);
+		}
+		else if(strcmp(ptr->to,name)==0){	// swap to and from, and add '-' to value
+			insertFirst(&newList,ptr->to,ptr->from,-1*ptr->value,ptr->item);
+			found = 1;
+		}
+		ptr = ptr->next;
+	}
+	if(found==0){
+		printf("Loan not found: %s\n",name);
+		return 1;
+	}
+	else{
+		printList(newList);
+		return 0;
+	}
+} 
+
 void freeList() {
   	struct node* ptr = head;
   	struct node* tmp = NULL;
@@ -48,6 +77,8 @@ void freeList() {
     	ptr = tmp;
 	}
 }
+
+
 int input(){
 	printf("----------------  input data  ---------------------\n");
 	printf("John needs to give Mary 10 dollars for coffee \n");	
@@ -61,14 +92,20 @@ int input(){
 	scanf("%d",&dollars);
 	scanf("%20s",name);
 
-	insertFirst(tx,rx,dollars,name);
+	insertFirst(&head,tx,rx,dollars,name);
 	printf("----------------  data added  ----------------------\n");
 
 	return 0;
 }
-/*int show(){
+int show(){
+	char str[LEN];
+	printList(head);
+	printf("###################################\n");
+  	printf("Whos' loan you want to check? ");
+	scanf("%s", str);
+	printLoan(str);
 	return 0;
-}*/
+}
 int menu(){
 	printf("================  prompt  ==========================\n");
 	printf("What do you want to do?");
@@ -90,7 +127,9 @@ int menu(){
 	}
 	else if (strcmp(str,"s") == 0){
 		printf("show()\n");
-		printList();
+		printList(head);
+		printf("###########################\n");
+		show();
 	}
 	else {
 		printf("Invalid input!\n");
